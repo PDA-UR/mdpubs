@@ -1,0 +1,227 @@
+%%%% Proceedings format for most of ACM conferences (with the exceptions listed below) and all ICPS volumes.
+$if(acmart-style)$
+\documentclass[$acmart-style$, screen $if(authorversion)$, authorversion$endif$ $if(for-review)$, review$endif$]{acmart}
+$else$
+\documentclass[sigconf, screen$if(authorversion)$, authorversion$endif$ $if(for-review)$, review$endif$]{acmart}
+$endif$
+
+%\documentclass[sigconf, screen]{acmart}
+
+%%%% Proceedings format for SIGPLAN conferences 
+% \documentclass[sigplan, anonymous, review]{acmart}
+
+%%%% Proceedings format for SIGCHI conferences
+% \documentclass[sigchi, review]{acmart}
+
+%%%% To use the SIGCHI extended abstract template, please visit
+% https://www.overleaf.com/read/zzzfqvkmrfzn
+
+\renewcommand{\bibfont}{\Small}
+
+% fix for pandoc 1.14
+\providecommand{\tightlist}{%
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% fix for fontenc issue:
+\let\emph\textit
+
+%$if(linestretch)$
+%\usepackage{setspace}
+%\setstretch{$linestretch$}
+%$endif$
+
+% \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+%   \usepackage[T1]{fontenc}
+%   \usepackage[utf8]{inputenc}
+% $if(euro)$
+%   \usepackage{eurosym}
+% $endif$
+% \else % if luatex or xelatex
+%   \ifxetex
+%     \usepackage{mathspec}
+%     \usepackage{xltxtra,xunicode}
+%   \else
+%     \usepackage{fontspec}
+%   \fi
+%   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+%   \newcommand{\euro}{€}
+$if(mainfont)$
+    \setmainfont{$mainfont$}
+$endif$
+$if(sansfont)$
+    \setsansfont{$sansfont$}
+$endif$
+$if(monofont)$
+    \setmonofont[Mapping=tex-ansi]{$monofont$}
+$endif$
+$if(mathfont)$
+    \setmathfont(Digits,Latin,Greek){$mathfont$}
+$endif$
+% \fi
+
+% use upquote if available, for straight quotes in verbatim environments
+%\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+%\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+
+$if(natbib)$
+\usepackage{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage{biblatex}
+$if(biblio-files)$
+\bibliography{$biblio-files$}
+$endif$
+$endif$
+
+$if(listings)$
+\usepackage{listings}
+\lstset
+    { language=C
+    , basicstyle=\fontsize{8}{10}\fontencoding{T1}\ttfamily
+    , keepspaces=true
+    , showspaces=false
+    , showstringspaces=false
+    , breaklines=true
+    , frame=tb
+    }
+\newcommand{\passthrough}[1]{#1}
+$endif$
+
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+$if(tables)$
+\usepackage{longtable,booktabs}
+$endif$
+$if(graphics)$
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+$endif$
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+$if(numbersections)$
+\setcounter{secnumdepth}{5}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allows verbatim text in footnotes
+$endif$
+
+\usepackage{balance} % balance columns on last page
+\usepackage{booktabs} % For formal tables
+
+
+% Copyright
+%\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+\settopmatter{printacmref=true}
+%\settopmatter{printfolios=true}
+
+
+\copyrightyear{$conference.year$}
+\acmYear{$conference.year$}
+\setcopyright{$copyright$}
+\acmConference[$conference.short$]{$conference.long$}{$conference.date$}{$conference.place$}
+$if(booktitle)$\acmBooktitle{$booktitle$}$else$\acmBooktitle{$conference.long$ ($conference.short$), $conference.date$, $conference.place$}$endif$
+\acmDOI{$doi$}
+\acmISBN{$isbn$}
+$if(price)$\acmPrice{$price$}$endif$
+
+\bibliographystyle{ACM-Reference-Format}
+
+\begin{document}
+\title$if(shorttitle)$[$shorttitle$]$endif${$title$}
+%\titlenote{Produces the permission block, and
+%  copyright information}
+%\subtitle{Extended Abstract}
+%\subtitlenote{The full version of the author's guide is available as
+%  \texttt{acmart.pdf} document}
+
+$if(anonymized)$
+\author{Anonymized for blind review}
+$else$
+  $for(author)$
+    \author{$author.firstname$ $author.lastname$}
+    \orcid{$author.orcid$}
+      $for(author.affiliation)$
+      \affiliation{%
+          \position{$author.affiliation.position$}
+          \institution{$author.affiliation.institution$}
+          \streetaddress{$author.affiliation.streetaddress$}
+          \postcode{$author.affiliation.postcode$}
+          \city{$author.affiliation.city$} 
+          \city{$author.affiliation.state$} 
+          \country{$author.affiliation.country$} 
+      }
+      $endfor$
+      \email{$author.email$}
+  $endfor$
+$endif$
+
+% The default list of authors is too long for headers.
+\renewcommand{\shortauthors}{$shortauthors$}
+
+\IfFileExists{ccs_metadata.tex}{\input{ccs_metadata.tex}}{}
+
+\begin{abstract}
+$abstract$
+\end{abstract}
+
+\keywords{$for(keywords)$$keywords$$sep$, $endfor$}
+
+\maketitle
+
+
+$for(include-before)$
+  $include-before$
+$endfor$
+
+$body$
+
+$for(include-after)$
+$include-after$
+
+$endfor$
+
+\balance
+\bibliographystyle{ACM-Reference-Format}
+
+\end{document}
