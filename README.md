@@ -63,5 +63,5 @@ If you rename example.md (hint: you should), you will also need to adjust the "B
 
 - [Purush Swaminathan's acm-pandoc-paper](https://github.com/purukaushik/acm-pandoc-paper) (only seems to support the old version of the template but includes support for automatically building PDFs via Travis)
 - [Daniel Garziotin: How to write an ACM-styled conference paper using Markdown/Pandoc](https://ineed.coffee/4008/how-to-write-an-acm-styled-conference-paper-using-markdownpandoc/)
-- [Ulrik Lyngs: How to Write ACM Articles with R Markdown](https://ulyngs.github.io/blog/posts/2018-10-28-how-to-write-acm-articles-with-r-markdown/)
+- [Ulrik Lyngs: How to Write ACM Articles with R Markdown](https://ulyngs.github.io/blog/posts/2018-10-28-how-to-write-acm-articles-with-r-markdown/) ([Github Repository](https://github.com/ulyngs/chi-proc-rmd-template))
 
