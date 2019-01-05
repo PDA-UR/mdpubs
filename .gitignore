@@ -1,3 +1,10 @@
+## Python cache stuff
+*.pyc
+__pycache__
+
+## Vim swap files
+*.swp
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
