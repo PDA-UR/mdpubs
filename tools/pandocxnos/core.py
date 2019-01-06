@@ -23,12 +23,13 @@ given in the function docstrings.
 
 #### Globals ####
 
-  * `STRTYPES` - a list of string types for this python version
+  * `STRTYPES` - a tuple of string types for this python version
   * `STDIN`/`STDOUT`/`STDERR` - streams for use with pandoc
 
 #### Utility functions ####
 
   * `init()` - Determines and returns the pandoc version
+  * `check_bool()` - Checks that a value is boolean
   * `get_meta()` - Retrieves variables from a document's metadata
 
 #### Element list functions ####
@@ -73,13 +74,16 @@ from pandocfilters import elt as _elt
 from .pandocattributes import PandocAttributes
 
 
+# pylint: disable=too-many-lines
+
+
 #=============================================================================
 # Globals
 
 # Python has different string types depending on the python version.  We must
 # be able to identify them both.
 # pylint: disable=undefined-variable
-STRTYPES = [str] if sys.version_info > (3,) else [str, unicode]
+STRTYPES = (str,) if sys.version_info > (3,) else (str, unicode)
 
 # Pandoc uses UTF-8 for both input and output; so must its filters.  This is
 # handled differently depending on the python version.
@@ -208,6 +212,21 @@ def init(pandocversion=None, doc=None):
     return _PANDOCVERSION
 
 
+# check_bool() ---------------------------------------------------------------
+
+def check_bool(v):
+    """Checks that metadata value is boolean.  Returns the value or
+    raises an exception."""
+    if not isinstance(v, bool):
+        msg = 'Metadata boolean values must be one of the following: ' \
+              'true, True, TRUE, false, False, FALSE. ' \
+              'As of pandoc 2.2.2, the following are not allowed: ' \
+              'On, Off.'
+        raise ValueError(msg)
+    else:
+        return v
+
+
 # get_meta() -----------------------------------------------------------------
 
 # Metadata json depends upon whether or not the variables were defined on the
@@ -218,11 +237,18 @@ def get_meta(meta, name):
     """Retrieves the metadata variable 'name' from the 'meta' dict."""
     assert name in meta
     data = meta[name]
+
     if data['t'] in ['MetaString', 'MetaBool']:
         return data['c']
     elif data['t'] == 'MetaInlines':
-        if len(data['c']) == 1:
-            return stringify(data['c'])
+        # Handle bug in pandoc 2.2.3 and 2.2.3.1: Return boolean value rather
+        # than strings, as appropriate.
+        if len(data['c']) == 1 and data['c'][0]['t'] == 'Str':
+            if data['c'][0]['c'] in ['true', 'True', 'TRUE']:
+                return True
+            elif data['c'][0]['c'] in ['false', 'False', 'FALSE']:
+                return False
+        return stringify(data['c'])
     elif data['t'] == 'MetaList':
         return [stringify(v['c']) for v in data['c']]
     else:
@@ -241,7 +267,7 @@ def elt(eltType, numargs):  # pylint: disable=invalid-name
     def Element(*value):  # pylint: disable=invalid-name
         """Creates an element."""
         el = _elt(eltType, numargs)(*value)
-        if type(el['c']) == tuple:
+        if isinstance(el['c'], tuple):
             el['c'] = list(el['c'])  # The content should be a list, not tuple
         return el
     return Element
@@ -255,8 +281,7 @@ def _getel(key, value):
     elif key in ['Plain', 'Para', 'BlockQuote', 'BulletList',
                  'DefinitionList', 'HorizontalRule', 'Null']:
         return elt(key, 1)(value)
-    else:
-        return elt(key, len(value))(*value) # pylint: disable=star-args
+    return elt(key, len(value))(*value)
 
 
 #=============================================================================
@@ -292,6 +317,7 @@ def quotify(x):
             else:
                 ret += value[1] + [Str(quote)]
             return ret
+        return None
 
     return walk(walk(x, _quotify, '', {}), join_strings, '', {})
 
@@ -311,6 +337,7 @@ def dollarfy(x):
         """Replaces Math elements"""
         if key == 'Math':
             return Str('$' + value[1] + '$')
+        return None
 
     return walk(x, _dollarfy, '', {})
 
@@ -412,7 +439,7 @@ def _join_strings(x):
         if x[i]['t'] == 'Str' and x[i+1]['t'] == 'Str':
             x[i]['c'] += x[i+1]['c']
             del x[i+1]  # In-place deletion of element from list
-            return  # Forces processing to repeat
+            return None  # Forces processing to repeat
     return True  # Terminates processing
 
 def join_strings(key, value, fmt, meta):  # pylint: disable=unused-argument
@@ -440,7 +467,7 @@ def _is_broken_ref(key1, value1, key2, value2):
     # Assemble the parts
     n = 0 if _PANDOCVERSION < '1.16' else 1
 
-    if type(value1[n][0]['c']) == list:
+    if isinstance(value1[n][0]['c'], list):
         # Occurs when there is quoted text in an actual link.  This is not
         # a broken link.  See Issue #1.
         return False
@@ -473,7 +500,7 @@ def _repair_refs(x):
 
             # Insert the suffix, label and prefix back into x.  Do it in this
             # order so that the indexing works.
-            if len(suffix):
+            if suffix:
                 x.insert(i+2, Str(suffix))
             x[i+1] = Cite(
                 [{"citationId":label,
@@ -483,7 +510,7 @@ def _repair_refs(x):
                   "citationMode":{"t":"AuthorInText", "c":[]},
                   "citationHash":0}],
                 [Str('@' + label)])
-            if len(prefix):
+            if prefix:
                 if i > 0 and x[i-1]['t'] == 'Str':
                     x[i-1]['c'] = x[i-1]['c'] + prefix
                     del x[i]
@@ -492,7 +519,7 @@ def _repair_refs(x):
             else:
                 del x[i]
 
-            return  # Forces processing to repeat
+            return None  # Forces processing to repeat
 
     return True  # Terminates processing
 
@@ -601,7 +628,7 @@ def _process_refs(x, labels):
                 _remove_brackets(x, i)
 
             # The element list may be changed
-            return  # Forces processing to repeat via _repeat decorator
+            return None  # Forces processing to repeat via _repeat decorator
 
     return True  # Terminates processing in _repeat decorator
 
@@ -633,6 +660,8 @@ def process_refs_factory(labels):
             _process_refs(value[-2], labels)
         elif key == 'Table':
             _process_refs(value[-5], labels)
+        elif key == 'Span':
+            _process_refs(value[-1], labels)
         elif key == 'Emph':
             _process_refs(value, labels)
         elif key == 'Strong':
@@ -693,7 +722,7 @@ def replace_refs_factory(references, use_cleveref_default, use_eqref,
 
             # Check first to see if fakery is turned off
             if not 'xnos-cleveref-fake' in meta or \
-              get_meta(meta, 'xnos-cleveref-fake'):
+              check_bool(get_meta(meta, 'xnos-cleveref-fake')):
                 # Cleveref fakery
                 tex2 = [
                     r'% pandoc-xnos: cleveref fakery',
@@ -710,6 +739,7 @@ def replace_refs_factory(references, use_cleveref_default, use_eqref,
                 ret.append(RawBlock('tex', '\n'.join(tex2)))
             ret.append(RawBlock('tex', '\n'.join(tex1)))
             return ret
+        return None
 
     def _cite_replacement(key, value, fmt, meta):
         """Returns context-dependent content to replace a Cite element."""
@@ -736,7 +766,7 @@ def replace_refs_factory(references, use_cleveref_default, use_eqref,
             if use_cleveref:
                 # Renew commands needed for cleveref fakery
                 if not 'xnos-cleveref-fake' in meta or \
-                  get_meta(meta, 'xnos-cleveref-fake'):
+                  check_bool(get_meta(meta, 'xnos-cleveref-fake')):
                     faketex = (r'\xrefname' if plus else r'\Xrefname') + \
                       '{%s}' % name
                 else:
@@ -774,7 +804,7 @@ def replace_refs_factory(references, use_cleveref_default, use_eqref,
                            'BlockQuote', 'OrderedList', 'BulletList',
                            'DefinitionList', 'Header', 'HorizontalRule',
                            'Table', 'Div', 'Null']:
-                return
+                return None
 
             # Reconstruct the block element
             el = _getel(key, value)
@@ -787,6 +817,8 @@ def replace_refs_factory(references, use_cleveref_default, use_eqref,
         elif key == 'Cite' and len(value) == 3:  # Replace the reference
 
             return _cite_replacement(key, value, fmt, meta)
+
+        return None
 
     return replace_refs
 
@@ -839,9 +871,6 @@ def detach_attrs_factory(f):
     Attributes provided natively by pandoc will be left as is."""
 
     # Get the name and standard length
-    if len(f.__closure__) != 2:
-        raise RuntimeError(f.__closure__)
-
     name = f.__closure__[0].cell_contents
     n = f.__closure__[1].cell_contents
 
@@ -852,9 +881,9 @@ def detach_attrs_factory(f):
             if len(value) == n+1:
                 # Make sure value[0] represents attributes then delete
                 assert len(value[0]) == 3
-                assert type(value[0][0]) in STRTYPES
-                assert type(value[0][1]) is list
-                assert type(value[0][2]) is list
+                assert isinstance(value[0][0], STRTYPES)
+                assert isinstance(value[0][1], list)
+                assert isinstance(value[0][2], list)
                 del value[0]
 
     return detach_attrs
@@ -868,8 +897,9 @@ def insert_secnos_factory(f):
     section numbers into the attributes of elements of type f.
     """
 
-    # Get the name
+    # Get the name and standard length
     name = f.__closure__[0].cell_contents
+    n = f.__closure__[1].cell_contents
 
     def insert_secnos(key, value, fmt, meta):  # pylint: disable=unused-argument
         """Inserts section numbers into elements attributes."""
@@ -877,20 +907,33 @@ def insert_secnos_factory(f):
         global sec  # pylint: disable=global-statement
 
         if 'xnos-number-sections' in meta and \
-          meta['xnos-number-sections']['c'] and \
-          fmt in ['html', 'html5']:
+          check_bool(get_meta(meta, 'xnos-number-sections')) and \
+              fmt in ['html', 'html5']:
             if key == 'Header':
                 if 'unnumbered' in value[1][1]:
                     return
                 level = value[0]
-                n = level - len(sec)
-                if n > 0:
-                    sec.extend([0]*n)
+                m = level - len(sec)
+                if m > 0:
+                    sec.extend([0]*m)
                 sec[level-1] += 1
                 sec = sec[:MAXLEVEL]
             if key == name:
-                s = '.'.join([str(n) for n in sec])
-                value[0][2].insert(0, ['secno', s])
+
+                # Only insert if attributes are attached.  Images always have
+                # attributes.
+                assert len(value) <= n+1
+                if name == 'Image' or len(value) == n+1:
+
+                    # Make sure value[0] represents attributes
+                    assert len(value[0]) == 3
+                    assert isinstance(value[0][0], STRTYPES)
+                    assert isinstance(value[0][1], list)
+                    assert isinstance(value[0][2], list)
+
+                    # Insert the section number into the attributes
+                    s = '.'.join([str(m) for m in sec])
+                    value[0][2].insert(0, ['secno', s])
 
     return insert_secnos
 
@@ -903,17 +946,31 @@ def delete_secnos_factory(f):
     section numbers from the attributes of elements of type f.
     """
 
-    # Get the name
+    # Get the name and standard length
     name = f.__closure__[0].cell_contents
+    n = f.__closure__[1].cell_contents
 
     def delete_secnos(key, value, fmt, meta):  # pylint: disable=unused-argument
         """Deletes section numbers from elements attributes."""
         if 'xnos-number-sections' in meta and \
-          meta['xnos-number-sections']['c'] and \
-          fmt in ['html', 'html5']:
-            if key == name and len(value[0][2]) and \
-              value[0][2][0][0] == 'secno':
-                del value[0][2][0]
+          check_bool(get_meta(meta, 'xnos-number-sections')) and \
+              fmt in ['html', 'html5']:
+
+            # Only delete if attributes are attached.   Images always have
+            # attributes.
+            if key == name:
+                assert len(value) <= n+1
+                if name == 'Image' or len(value) == n+1:
+
+                    # Make sure value[0] represents attributes
+                    assert len(value[0]) == 3
+                    assert isinstance(value[0][0], STRTYPES)
+                    assert isinstance(value[0][1], list)
+                    assert isinstance(value[0][2], list)
+
+                    # Remove the secno attribute
+                    if value[0][2] and value[0][2][0][0] == 'secno':
+                        del value[0][2][0]
 
     return delete_secnos
 
@@ -930,7 +987,7 @@ def insert_rawblocks_factory(rawblocks):
         """Inserts non-duplicate RawBlock elements."""
 
         if not rawblocks:
-            return
+            return None
 
         # Put the RawBlock elements in front of the first block element that
         # isn't also a RawBlock.
@@ -939,16 +996,18 @@ def insert_rawblocks_factory(rawblocks):
                        'BlockQuote', 'OrderedList', 'BulletList',
                        'DefinitionList', 'Header', 'HorizontalRule',
                        'Table', 'Div', 'Null']:
-            return
+            return None
 
         if key == 'RawBlock':  # Remove duplicates
-            rawblock = RawBlock(*value)  # pylint: disable=star-args
+            rawblock = RawBlock(*value)
             if rawblock in rawblocks:
                 rawblocks.remove(rawblock)
-                return
+                return None
 
         if rawblocks:  # Insert blocks
             el = _getel(key, value)
             return [rawblocks.pop(0) for i in range(len(rawblocks))] + [el]
+
+        return None
 
     return insert_rawblocks
