@@ -163,6 +163,14 @@ $if(price)$\acmPrice{$price$}$endif$
 
 \bibliographystyle{ACM-Reference-Format}
 
+$if(use-marginfigures)$
+%\renewenvironment{figure}{\begin{marginfigure}}{%
+%    \end{marginfigure}\ignorespacesafterend% as suggested above
+%}
+\let\figure\marginfigure
+\let\endfigure\endmarginfigure
+$endif$
+
 \begin{document}
 \title$if(shorttitle)$[$shorttitle$]$endif${$title$}
 %\titlenote{Produces the permission block, and

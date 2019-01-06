@@ -5,7 +5,7 @@ MD=${BASE}.md
 PDF=${BASE}.pdf
 TEX=${BASE}.tex
 
-STYLE=-V acmart-style='sigchi-a'
+STYLE=-V acmart-style='sigchi-a' -V use-marginfigures='true'
 TEMPLATE=./templates/acmart_template.tex 
 FONTS=-V mainfont='Linux Biolinum O' -V sansfont='Linux Biolinum O' -V monofont='FreeMono'
 BIBLIOGRAPHY=--bibliography=./general_bibliography.bib --bibliography=./project_bibliography.bib
