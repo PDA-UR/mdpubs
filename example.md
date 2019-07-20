@@ -1,6 +1,7 @@
 ---
 # Note: not every field is used by every template. 
 title:  'Demonstrating How Markdown May Be Used For Writing Papers'
+shorttitle: 'Demonstrating How Markdown May Be Used ...'   # used for headers in order to avoid overlaps
 author:
 - firstname: Max
   lastname: Mustermann
@@ -49,7 +50,7 @@ conference:
 booktitle: "EXAMPLE '19 Adjunct Proceedings"  # automatically generated from conference info if empty
 doi: 
 isbn: 
-price: # nothing
+price: # nothing - put value into quotes to avoid interpretation as number ('15.00' instead of 15.00)
 abstract: |  # indent all lines in a block by two space characters
   For many papers, abstracts are important.
   For this one not. 
@@ -72,7 +73,7 @@ Figure {@fig:figure_one} is a placeholder.
 
 [^a_footnote]: When used sparingly. They are a good place for linking to websites, such as <https://github.com/alex/what-happens-when>.
 
-# Related Work
+# Examples
 
 ## Apples
 Lists are easy:
@@ -104,13 +105,17 @@ loop:
   goto loop
 ~~~~
 
+
 Put two space characters at the end of a line to insert a manual line break.  
 Teletype formatting example: ``pandoc --help`` is helpful.
 
 Insert an empty line to start a new paragraph.
 
-References
-==========
 
+# References {.unnumbered}
+# add the following lines to correctly format the references section for ACM articles.
+\footnotesize
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\indent
 <!-- pandoc appends bibliography here -->
-
