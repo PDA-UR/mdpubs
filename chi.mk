@@ -7,7 +7,8 @@ TEX=${BASE}.tex
 
 STYLE=-V acmart-style='sigchi'
 TEMPLATE=./templates/acmart_template.tex 
-FONTS=-V mainfont='Linux Libertine O' -V sansfont='Linux Biolinum O' -V monofont='FreeMono'
+#FONTS=-V mainfont='Linux Libertine O' -V sansfont='Linux Biolinum O' -V monofont='FreeMono' 
+FONTS=
 BIBLIOGRAPHY=--bibliography=./general_bibliography.bib --bibliography=./project_bibliography.bib
 CSL=./templates/acm-sigchi-proceedings.csl
 
