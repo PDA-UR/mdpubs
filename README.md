@@ -54,7 +54,7 @@ If you rename example.md (hint: you should), you will also need to adjust the "B
 
 ## Limitations
 
-- the output is not guaranteed to look correct. It might not be accepted by Sheridan Printing (although at least [one paper](https://dl.acm.org/citation.cfm?id=3214323) in the ACM DL was generated using this toolchain).
+- the output is not guaranteed to look correct. It might not be accepted by Sheridan Printing (although at least [two](https://dl.acm.org/citation.cfm?id=3214323) [papers](https://dl.acm.org/citation.cfm?doid=3290605.3300650) in the ACM DL were generated using this toolchain).
 - cruft and cargo cult in the templates (feel free to point out all instances)
 - **all ACM templates (acmart.cls):** the ``\shortauthors`` field is not automatically filled with *"Mustermann et al."* because Pandoc does not allow for easily extracting only the first author. Workaround: a special ``shortauthors`` YAML field.
 - **CHI Extended Abstracts template:** the margin/sidebar is not supported at the moment (and is such a special case that I won't add generic support for it). Footnotes are already placed into the margin by acmart.cls. Workaround: add raw TeX snippets to your markdown document.
