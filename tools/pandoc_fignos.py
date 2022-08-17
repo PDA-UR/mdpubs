@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python3
 
 """pandoc-fignos: a pandoc filter that inserts figure nos. and refs."""
 

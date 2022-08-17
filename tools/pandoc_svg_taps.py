@@ -4,6 +4,8 @@ Pandoc filter to convert svg files to pdf as suggested at:
 https://github.com/jgm/pandoc/issues/265#issuecomment-27317316
 """
 
+# Modified for TAPS: always return PNG, 600 dpi instead of 300 dpi
+
 __author__ = "Jerome Robert"
 
 import mimetypes
@@ -14,8 +16,8 @@ from pandocfilters import toJSONFilter, Image
 
 # TODO add emf export if fmt=="docx" ?
 fmt_to_option = {
-    "latex": ("-o", "pdf"),
-    "beamer": ("-o", "pdf"),
+    "latex": ("-o", "png"),
+    "beamer": ("-o", "png"),
     # because of IE
     "html": ("-o", "png")
 }
@@ -34,7 +36,7 @@ def svg_to_any(key, value, fmt, meta):
             except OSError:
                 mtime = -1
             if mtime < os.path.getmtime(src):
-                cmd_line = ['inkscape', '--export-dpi=300', option[0], eps_name, src]
+                cmd_line = ['inkscape', '--export-dpi=600', option[0], eps_name, src]
                 sys.stderr.write("Running %s\n" % " ".join(cmd_line))
                 subprocess.call(cmd_line, stdout=sys.stderr.fileno())
             return Image(['', [], []], alt, [eps_name, title])
