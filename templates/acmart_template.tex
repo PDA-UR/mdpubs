@@ -55,6 +55,15 @@ $if(mathfont)$
 $endif$
 \fi
 
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newenvironment{cslreferences}%
+  {$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
+  \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
+  {\par}
+$endif$
+
 % use upquote if available, for straight quotes in verbatim environments
 %\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
@@ -65,7 +74,7 @@ $endif$
 
 $if(natbib)$
 \usepackage{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+\bibliographystyle{ACM-Reference-Format}
 $endif$
 $if(biblatex)$
 \usepackage{biblatex}
@@ -152,8 +161,6 @@ $if(booktitle)$\acmBooktitle{$booktitle$}$else$\acmBooktitle{$conference.long$ (
 \acmISBN{$isbn$}
 $if(price)$\acmPrice{$price$}$endif$
 
-\bibliographystyle{ACM-Reference-Format}
-
 $if(use-marginfigures)$
 %\renewenvironment{figure}{\begin{marginfigure}}{%
 %    \end{marginfigure}\ignorespacesafterend% as suggested above
@@ -219,5 +226,9 @@ $endfor$
 
 \balance
 \bibliographystyle{ACM-Reference-Format}
+$if(biblio-files)$
+\bibliography{$biblio-files$}
+$endif$
+
 
 \end{document}
