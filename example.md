@@ -113,7 +113,7 @@ Insert an empty line to start a new paragraph.
 
 
 # References {.unnumbered}
-# add the following lines to correctly format the references section for ACM articles.
+<!-- add the following lines to correctly format the references section for ACM articles. -->
 \footnotesize
 \setlength{\parindent}{-0.2in}
 \setlength{\leftskip}{0.2in}
