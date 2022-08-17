@@ -1,5 +1,6 @@
 # mdpubs
 Pandoc-based toolchain and templates for writing scientific papers in [Markdown](https://daringfireball.net/projects/markdown/)
+Currently with a heavy focus on ACM publications.
 
 
 ## What is this?
@@ -38,18 +39,35 @@ It has a few advantages over Word and plain LaTeX:
 
 ## Usage
 
-Run ``make -f chi.mk`` to compile *example.md* into *example.pdf* using the CHI Proceedings template (a TeX file *example.tex* also gets generated - it helps in troubleshooting and might need to be submitted as source file with your camera-ready version).
+Run ``make -f sigconf.mk`` to compile *example.md* into *example.pdf* using the CHI Proceedings template (a TeX file *example.tex* also gets generated - it helps in troubleshooting and might need to be submitted as source file with your camera-ready version).
 
 If you rename example.md (hint: you should), you will also need to adjust the "BASE=..." line in the Makefile(s).
+
+As the manuscript/publication formats for ACM conferences are currently the only supported formats, you can rename `sigconf.mk` to `Makefile`.
+Then, you can just run `make` without further parameters to build the document.
+
+Check out the YAML block in `example.md`. It is used to set most metadata - including anonymization.
+
+Run `make -f sigconf.mk clean` to remove all generated files.
+
+Run `make -f sigconf.mk taps` to build a .zip archive that can be submitted to ACM's [TAPS](https://authors.acm.org/proceedings/production-information/taps-production-workflow). 
+Be aware that TAPS uses its own toolchain to generate PDF and HTML output from the TeX file you provide. 
+You will need to manually add required accessibility metadata to the TeX file. Check out the current requirements of ACM and/or your conference.
 
 
 ## Supported Styles
 
 - **ACM SIGCONF Proceedings** (new acmart.cls format only)
-- **ACM SIGCHI Proceedings** (new acmart.cls format only)
-- **ACM SIGCHI Extended Abstracts** (new acmart.cls format only)
-- [Mensch und Computer](https://ctan.org/pkg/mucproc)
 - (feel free to submit pull requests for additional templates)
+
+## Deprecated Styles:
+
+The Makefiles for these styles are still in the repository. 
+However, they might no longer work.
+
+- **ACM SIGCHI Proceedings** (SIGCHI switched to the sigconf format)
+- **ACM SIGCHI Extended Abstracts** (SIGCHI switched to the sigconf format)
+- [Mensch und Computer](https://ctan.org/pkg/mucproc) (MuC switched to ACM sigconf format)
 
 
 ## Limitations
