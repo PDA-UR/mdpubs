@@ -4,6 +4,7 @@ BASE=example
 MD=${BASE}.md
 PDF=${BASE}.pdf
 TEX=${BASE}.tex
+TEMP_FILES=${BASE}.aux ${BASE}.log ${BASE}.out
 
 STYLE=-V acmart-style='sigconf'
 TEMPLATE=./templates/acmart_template.tex 
@@ -23,4 +24,4 @@ all: ${TEX} ${PDF}
 	pandoc --number-sections --filter ./tools/pandoc_fignos.py --filter ./tools/pandoc_svg.py --listing ${BIBLIOGRAPHY} --template=${TEMPLATE}  ${FONTS} ${STYLE} $< -o $@
 
 clean: 
-	-rm ${PDF} ${TEX}
+	-rm ${PDF} ${TEX} ${TEMP_FILES}
