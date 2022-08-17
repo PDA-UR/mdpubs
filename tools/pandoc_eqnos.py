@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 """pandoc-eqnos: a pandoc filter that inserts equation nos. and refs."""
 

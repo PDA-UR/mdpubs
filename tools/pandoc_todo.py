@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Pandoc filter to change "{to do!}" to "\todo{to do!}"

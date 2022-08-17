@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 """pandoc-tablenos: a pandoc filter that inserts table nos. and refs."""
 
