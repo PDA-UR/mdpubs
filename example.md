@@ -62,7 +62,7 @@ abstract: |  # indent all lines in a block by two space characters
 <!-- Background ---------------------------------------------- -->
 As shown by Antkare [@Labbe2010IkeAntkare; @Antkare2009ReinforcementLearning], publishing is important.
 This example document contains fragments typically used when writing a scientific paper. Please check the [Pandoc User's Guide](https://pandoc.org/MANUAL.html) for more details on *Pandoc-flavored Markdown*.
-Figure {@fig:figure_one} is a placeholder.
+[@fig:figure_one] is a placeholder.
 
 <!-- ![An image that demonstrates something. This is the SVG version that only works if you have installed Inkscape.](img/placeholder.svg){#fig:figure_one} -->
 

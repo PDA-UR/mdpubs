@@ -7,8 +7,8 @@ TEX=${BASE}.tex
 ZIP=${BASE}.zip
 TEMP_FILES=${BASE}.aux ${BASE}.log ${BASE}.out
 
-#STYLE=-V acmart-style='manuscript'
-STYLE=-V acmart-style='sigconf'
+STYLE=-V acmart-style='manuscript, review'
+#STYLE=-V acmart-style='sigconf'
 #STYLE=-V acmart-style='sigconf, authorversion, screen'
 TEMPLATE=./templates/acmart_template.tex 
 FONTS=-V mainfont='Linux Libertine O' -V sansfont='Linux Biolinum O' -V monofont='FreeMono'
@@ -23,11 +23,11 @@ all: ${TEX} ${PDF}
 taps: ${BASE}.zip
 
 %.pdf: %.md
-	pandoc --number-sections --csl=${CSL} --filter ./tools/pandoc_fignos.py --filter ./tools/pandoc_svg.py --listing ${BIBLIOGRAPHY} --pdf-engine=xelatex --template=${TEMPLATE} ${FONTS} ${STYLE} $< -o $@
+	pandoc  --number-sections --csl=${CSL} -M figPrefix='Figure' -M figureTitle='Figure' --filter ./tools/pandoc-crossref --filter ./tools/pandoc_svg.py --listings --citeproc ${BIBLIOGRAPHY} --pdf-engine=xelatex --template=${TEMPLATE} ${FONTS} ${STYLE} $< -o $@
 	
 # TeX optimized for TAPS
 %.tex: %.md
-	pandoc -r markdown-auto_identifiers --natbib --number-sections --filter ./tools/pandoc_fignos.py --filter ./tools/pandoc_svg_taps.py --listing ${BIBLIOGRAPHY} ${BIBLIOFILES} --template=${TEMPLATE}  ${FONTS} ${STYLE} $< -o $@
+	pandoc -r markdown-auto_identifiers --natbib --number-sections -M figPrefix='Figure' -M figureTitle='Figure' --filter ./tools/pandoc-crossref --filter ./tools/pandoc_svg.py --citeproc --listings ${BIBLIOGRAPHY} ${BIBLIOFILES} --template=${TEMPLATE}  ${FONTS} ${STYLE} $< -o $@
 	
 ${ZIP}:  all
 	-rm -r taps_temp
