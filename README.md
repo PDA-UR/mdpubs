@@ -2,6 +2,8 @@
 Pandoc-based toolchain and templates for writing scientific papers in [Markdown](https://daringfireball.net/projects/markdown/)
 Currently with a heavy focus on ACM publications.
 
+NOTICE: Due to an upgrade to Pandoc 2.19, there are some rendering problems. I'll try to fix them as soon as possible.
+
 
 ## What is this?
 
@@ -31,9 +33,10 @@ It has a few advantages over Word and plain LaTeX:
 
 - a LaTeX distribution, such as [TeXlive](https://www.tug.org/texlive/)
 - XeLaTeX (maybe others, too)
-- [Pandoc](https://pandoc.org/)
+- [Pandoc](https://pandoc.org/) (currently, v2.19 is supported)
 - a Linux/Unix system (probably) with support for Makefiles
 - Python 3 (for some Pandoc filters)
+- the [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref/) filter (download the current release for you platform, extract the binary and, and put it into the `tools/` folder)
 - [Inkscape](https://inkscape.org/) (if you want to include SVG illustrations)
 
 
