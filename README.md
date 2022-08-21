@@ -2,7 +2,7 @@
 Pandoc-based toolchain and templates for writing scientific papers in [Markdown](https://daringfireball.net/projects/markdown/)
 Currently with a heavy focus on ACM publications.
 
-NOTICE: Due to an upgrade to Pandoc 2.19, there are some rendering problems. I'll try to fix them as soon as possible.
+**NOTICE:** There are still some rendering problems. I'll try to fix them as soon as possible. See *Limitations* section below.
 
 
 ## What is this?
@@ -55,7 +55,6 @@ Run `make -f sigconf.mk clean` to remove all generated files.
 
 Run `make -f sigconf.mk taps` to build a .zip archive that can be submitted to ACM's [TAPS](https://authors.acm.org/proceedings/production-information/taps-production-workflow). 
 Be aware that TAPS uses its own toolchain to generate PDF and HTML output from the TeX file you provide. 
-You will need to manually add required accessibility metadata to the TeX file. Check out the current requirements of ACM and/or your conference.
 
 
 ## Supported Styles
@@ -75,10 +74,12 @@ However, they might no longer work.
 
 ## Limitations
 
-- the output is not guaranteed to look correct. It might not be accepted by Sheridan Printing (although at least [two](https://dl.acm.org/citation.cfm?id=3214323) [papers](https://dl.acm.org/citation.cfm?doid=3290605.3300650) in the ACM DL were generated using this toolchain).
+- tables don't really work due to pandoc insisting on using `longtable`s which don't play nice with two-column formats
+- *references* section is not correctly formatted (numbers should be in brackets) 
+- the output is not guaranteed to look correct. It  might not be accepted by publication chairs (although at least [two](https://dl.acm.org/citation.cfm?id=3214323) [papers](https://dl.acm.org/citation.cfm?doid=3290605.3300650) in the ACM DL were generated using this toolchain).
 - cruft and cargo cult in the templates (feel free to point out all instances)
 - **all ACM templates (acmart.cls):** the ``\shortauthors`` field is not automatically filled with *"Mustermann et al."* because Pandoc does not allow for easily extracting only the first author. Workaround: a special ``shortauthors`` YAML field.
-- **CHI Extended Abstracts template:** the margin/sidebar is not supported at the moment (and is such a special case that I won't add generic support for it). Footnotes are already placed into the margin by acmart.cls. Workaround: add raw TeX snippets to your markdown document.
+- **CHI Extended Abstracts template:** the margin/sidebar is not supported at the moment (would be easy to do via a section class as with the wide images). Footnotes are already placed into the margin by acmart.cls. Workaround: add raw TeX snippets to your markdown document.
 
 ## See also
 
