@@ -9,7 +9,7 @@ $if(CJKmainfont)$
 $endif$
 
 %%%% Proceedings format for most of ACM conferences (with the exceptions listed below) and all ICPS volumes.
-\documentclass[$if(acmart-style)$ $acmart-style$ $else$ sigconf $endif$ $if(authorversion)$, authorversion $endif$ $if(for-review)$, review $endif$ $if(anonymized)$, anonymous $endif$]{acmart}
+\documentclass[$if(acmart-style)$ $acmart-style$ $elseif(for-review)$ manuscript, review $else$ sigconf $endif$ $if(authorversion)$, authorversion $endif$ $if(anonymized)$, anonymous $endif$]{acmart}
 
 %\renewcommand{\bibfont}{\Small}
 

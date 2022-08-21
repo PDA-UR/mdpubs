@@ -8,7 +8,7 @@ ZIP=${BASE}.zip
 TEMP_FILES=${BASE}.aux ${BASE}.log ${BASE}.out
 
 #STYLE=-V acmart-style='manuscript, review'
-STYLE=-V acmart-style='sigconf'
+#STYLE=-V acmart-style='sigconf'
 #STYLE=-V acmart-style='sigconf, authorversion, screen'
 TEMPLATE=./templates/acmart_template.tex 
 FONTS=-V mainfont='Linux Libertine O' -V sansfont='Linux Biolinum O' -V monofont='FreeMono'

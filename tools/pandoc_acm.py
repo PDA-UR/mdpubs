@@ -10,49 +10,6 @@ import sys
 from pandocfilters import toJSONFilters, RawInline, Str, Div, RawBlock, stringify
 
 
-'''
-You need a lua filter to process the fenced div:
-
-function Div(el)
-  if el.classes[1] == "special" then
-    -- insert element in front
-    table.insert(
-      el.content, 1,
-      pandoc.RawBlock("latex", "\\begin{Special}"))
-    -- insert element at the back
-    table.insert(
-      el.content,
-      pandoc.RawBlock("latex", "\\end{Special}"))
-  end
-  return el
-end
-i
-
-\begin{teaserfigure}
-  \includegraphics[width=\textwidth]{sampleteaser}
-  \caption{Seattle Mariners at Spring Training, 2010.}
-  \Description{Enjoying the baseball game from the third-base
-  seats. Ichiro Suzuki preparing to bat.}
-  \label{fig:teaser}
-\end{teaserfigure}
-
-
-'''
-
-'''
- [{'t': 'Image', 
-   'c': [ ['fig:teaser',
-         [], 
-         [['width', '100%']]
-         ],
-         
-         [{'t': 'Str', 'c': 'image'}],  txt
-         ['img/sampleteaser.pdf', 'fig:'] (src,tit)
-        ]}]
-
-'''
-
-
 def m(element):
     "'firstname': {'t': 'MetaInlines', 'c': [{'t': 'Str', 'c': 'Max'}]}"
     if type(element) == str:
@@ -70,20 +27,6 @@ def get_from_list(l, name, default):
                 return item[1]
     return default
 
-"""
-def concat(list_of_elements):
-    out = []
-    for e in list_of_elements:
-        if e['t'] == 'Str':
-            out.append(e['c'])
-        elif e['t'] == 'Space':
-            out.append(" ")
-        elif e['t'] == 'SoftBreak':
-            out.append("\n")
-        else:
-            out.append(" ")
-    return "".join(out)
-"""
 
 def acm_figures(key, value, fmt, meta):
     if key != 'Image' or fmt != 'latex':  # don't modify element
@@ -107,19 +50,19 @@ def acm_figures(key, value, fmt, meta):
     else:
         ftype = 'figure'
     new = [
-    RawInline('tex', "\\begin{%s}\n" % ftype),
-    RawInline('tex', "\\includegraphics[%s]{%s}\n" % (width_str, src)),
-    RawInline('tex', "\\caption{"),
-    *caption,
-    RawInline('tex', "}\n"),
-    RawInline('tex', "\\Description{%s}\n" % description),
-    RawInline('tex', "\\label{%s}\n" % ident),
-    RawInline('tex', "\\end{%s}\n" % ftype)
+        RawInline('tex', "\\begin{%s}\n" % ftype),
+        RawInline('tex', "\\includegraphics[%s]{%s}\n" % (width_str, src)),
+        RawInline('tex', "\\caption{"),
+        *caption,
+        RawInline('tex', "}\n"),
+        RawInline('tex', "\\Description{%s}\n" % description),
+        RawInline('tex', "\\label{%s}\n" % ident),
+        RawInline('tex', "\\end{%s}\n" % ftype)
     ]
-
     return new
 
-def acm_abstract(key, value, fmt, meta):
+
+def acm_special_sections(key, value, fmt, meta):
     if key != 'Div' or fmt != 'latex':  # don't modify element
         return None
     # else:
@@ -128,7 +71,14 @@ def acm_abstract(key, value, fmt, meta):
     [[ident, classes, kvs], content] = value 
     if "Abstract" in classes:
         meta['abstract'] = m(content)
-        return [] # remove abstract element here, use only in template
+        return []  # remove abstract element here, use only in template
+    if "Acknowledgments" in classes:
+        meta['acknowledgments'] = m(content)
+        return [RawBlock('tex', "\\begin{acks}"),
+                *content,
+                RawBlock('tex', "\\end{acks}")
+                ]
+
 
 if __name__ == "__main__":
-    toJSONFilters([acm_abstract, acm_figures])
+    toJSONFilters([acm_special_sections, acm_figures])

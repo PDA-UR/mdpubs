@@ -1,4 +1,6 @@
 ---
+# This YAML block contains title, author affiliations, and further metadata
+# It must be at the beginning of the document or in a separate file
 # Note: not every field is used by every template. 
 title:  'Writing ACM Conference Papers in Markdown'
 shorttitle: 'Writing ACM ...'   # used for headers in order to avoid overlaps
@@ -38,7 +40,7 @@ categories: [none]
 link-citations: false
 links-as-notes: false
 copyright: rightsretained  # rightsretained, acmlicensed, acmcopyright, usgov, usgovmixed, cagov, cagovmixed
-anonymized: false
+anonymized: false    # replace author names with placeholder, hide Acknowledgments, set anonymous mode of template if available
 authorversion: false  # mark as author's version
 for-review: false   # add e.g., line numbers to supporting formats
 conference:
@@ -67,14 +69,12 @@ The `width` property isn't used much at the moment.
 
 # Introduction
 
-This sample document contains some text from the official ACM LaTeX template.
-
-ACM's consolidated article template, introduced in 2017, provides a
-consistent LaTeX style for use across ACM publications, and incorporates
-accessibility and metadata-extraction functionality necessary for future
-Digital Library endeavors. Numerous ACM and SIG-specific LaTeX templates
-have been examined, and their unique features incorporated into this
-single new template.
+> "ACM's consolidated article template, introduced in 2017, provides a
+> consistent LaTeX style for use across ACM publications, and incorporates
+> accessibility and metadata-extraction functionality necessary for future
+> Digital Library endeavors. Numerous ACM and SIG-specific LaTeX templates
+> have been examined, and their unique features incorporated into this
+> single new template."
 
 However, not everyone likes writing LaTeX code.
 Some people prefer writing and reading Markdown text.
@@ -150,108 +150,23 @@ packages. Please do not substitute other typefaces. The "`lmodern`" and
 "`ltimes`" packages should not be used, as they will override the
 built-in typeface families.
 
-# Title Information
-
-The title of your work should use capital letters appropriately -
-<https://capitalizemytitle.com/> has useful rules for capitalization.
-Use the `title` command to define the title of your work. If your work
-has a subtitle, define it with the `subtitle` command. Do not insert
-line breaks in your title.
-
-If your title is lengthy, you must define a short version to be used in
-the page headers, to prevent overlapping text. 
-You can do this at the top of the YAML block.
-
-
-# Authors and Affiliations
-
-Each author must be defined separately for accurate metadata
-identification. Multiple authors may share one affiliation. Authors'
-names should not be abbreviated; use full first names wherever possible.
-Include authors' e-mail addresses whenever possible.
-
-
-The `authornote` and `authornotemark` commands in the LaTeX template allow a note to apply to multiple authors --- for example, if the first two authors of an article contributed equally to the work.
-
-This feature is currently **not** supported in the Markdown toolchain.
-
-
-# Rights Information
-
-Authors of any work published by ACM will need to complete a rights
-form. Depending on the kind of work, and the rights management choice
-made by the author, this may be copyright transfer, permission, license,
-or an OA (open access) agreement.
-
-Regardless of the rights management choice, the author will receive a
-copy of the completed rights form once it has been submitted. This form
-contains LaTeX commands that must be copied into the source document.
-When the document source is compiled, these commands and their
-parameters add formatted text to several areas of the final document:
-
--   the "ACM Reference Format" text on the first page.
-
--   the "rights management" text on the first page.
-
--   the conference information in the page header(s).
-
-Rights information is unique to the work; if you are preparing several
-works for an event, make sure to use the correct set of commands with
-each of the works.
-
-The ACM Reference Format text is required for all articles over one page
-in length, and is optional for one-page articles (abstracts).
-
-# CCS Concepts and User-Defined Keywords
-
-Two elements of the "acmart" document class provide powerful taxonomic
-tools for you to help readers find your work in an online search.
-
-The ACM Computing Classification System ---
-<https://www.acm.org/publications/class-2012> --- is a set of
-classifiers and concepts that describe the computing discipline. Authors
-can select entries from this classification system, via
-<https://dl.acm.org/ccs/ccs.cfm>, and generate the commands to be
-included in the LaTeX source.
-
-User-defined keywords are a comma-separated list of words and phrases of
-the authors' choosing, providing a more flexible way of describing the
-research being presented.
-
-CCS concepts and user-defined keywords are required for for all articles
-over two pages in length, and are optional for one- and two-page
-articles (or abstracts).
 
 # Sectioning Commands
-
-Your work should use standard LaTeX sectioning commands: `section`,
-`subsection`, `subsubsection`, and `paragraph`. They should be numbered;
-do not remove the numbering from the commands.
-
-Simulating a sectioning command by setting the first word or words of a
-paragraph in boldface or italicized text is **not allowed.**
 
 # Tables
 
 The "`acmart`" document class includes the "`booktabs`" package ---
 <https://ctan.org/pkg/booktabs> --- for preparing high-quality tables.
 
+Unfortunately, Pandoc output `longtable` tables which cause some layout problems. 
+One possible workaround might be to replace all instances of `longtable` with `supertabular` before compiling the TeX file.
 Table captions are placed *above* the table.
-
-Because tables cannot be split across pages, the best placement for them
-is typically the top of the page nearest their initial cite. To ensure
-this proper "floating" placement of tables, use the environment
-**table** to enclose the table's contents and the table caption. The
-contents of the table itself must go in the **tabular** environment, to
-be aligned properly in rows and columns, with the desired horizontal and
-vertical rules. Again, detailed instructions on **tabular** material are
-found in the *LaTeX User's Guide*.
 
 Immediately following this sentence is the point at which
 [@tbl:freq] is included in the input file; compare the placement of the table here with
 the table in the printed output of this document.
 
-
+<!--
 ::: {#tbl:freq}
    Non-English or Math    Frequency   Comments
   --------------------- ------------- -------------------
@@ -262,26 +177,7 @@ the table in the printed output of this document.
 
   : Frequency of Special Characters
 :::
-
-
-To set a wider table, which takes up the whole width of the page's live
-area, use the environment **table\*** to enclose the table's contents
-and the table caption. As with a single-column table, this wide table
-will "float" to a location deemed more desirable. Immediately following
-this sentence is the point at which
-Table [@tbl:commands] is included in the input file; again, it is
-instructive to compare the placement of the table here with the table in
-the printed output of this document.
-
-
-::: {#tbl:commands}
-      Command       A Number  Comments
-  ---------------- ---------- ------------------
-   `\author`              100     Author
-   `\table`               300     For tables
-   `\table*`             400     For wider tables
-:::
-
+-->
 
 # Math Equations
 
@@ -323,13 +219,9 @@ demonstrate LaTeX's able handling of numbering.
 
 # Figures
 
-The "`figure`" environment should be used for figures. One or more
-images can be placed within a figure. If your figure contains
-third-party material, you must clearly identify it as such, as shown in
-the example below ([@fig:placeholder1; @fig:placeholder2]) .
+See the examples below ([@fig:placeholder1; @fig:placeholder2]) .
 
-Your figures should contain a caption which describes the figure to the
-reader.
+Your figures should contain a caption. 
 
 Figure captions are placed *below* the figure.
 ![A placeholder image with a single-column width.](img/placeholder.pdf){description="Every image should have a description!" #fig:placeholder1}
@@ -343,19 +235,12 @@ cannot see it. They are also used by search engine crawlers for indexing
 images, and when images cannot be loaded.
 
 A figure description must be unformatted plain text less than 2000
-characters long (including spaces). **Figure descriptions should not
-repeat the figure caption -- their purpose is to capture important
-information that is not already provided in the caption or the main text
-of the paper.** For figures that convey important and complex new
-information, a short text description may not be adequate. More complex
-alternative descriptions can be placed in an appendix and referenced in
-a short figure description. For example, provide a data table capturing
-the information in a bar chart, or a structured list representing a
-graph. For additional information regarding how best to write figure
-descriptions and why doing this is so important, please see
-<https://www.acm.org/publications/taps/describing-figures/>.
+characters long (including spaces). 
+See <https://www.acm.org/publications/taps/describing-figures/>.
 
 # Citations and Bibliographies
+
+*From the ACM template:*
 
 The use of  for the preparation and formatting of one's references is
 strongly recommended. Authors' names should be complete --- use full
@@ -408,48 +293,23 @@ citations with DOIs:
 citations: [@TUGInstmem; @Thornburg01; @CTANacmart]. Artifacts: [@R] and
 [@UMassCitations].
 
-# Acknowledgments
-
-Identification of funding sources and other support, and thanks to
-individuals and groups that assisted in the research and the preparation
-of the work should be included in an acknowledgment section, which is
-placed just before the reference section in your document.
-
-This section has a special environment:
-
-      \begin{acks}
-      ...
-      \end{acks}
-
-so that the information contained therein can be more easily collected
-during the article metadata extraction phase, and to ensure consistency
-in the spelling of the section heading.
-
-Authors should not prepare this section as a numbered or unnumbered
-`\section`; please use the "`acks`" environment.
-
-# Appendices
-
-If your work needs an appendix, add it before the "`\end{document}`"
-command at the conclusion of your source document.
-
-Start the appendix with the "`appendix`" command:
-
-      \appendix
-
-and note that in the appendix, sections are lettered, not numbered. This
-document has two appendices, demonstrating the section and subsection
-identification method.
 
 # SIGCHI Extended Abstracts
 
 are not supported by this toolchain at the moment.
 
+::: Acknowledgments
+All acknowledgments should be placed in this block so that they can be formatted correctly by the template.
+The ACM template also hides the *Acknowledgments* section when `anonymous` mode is enabled.
+:::
+
 
 # References {.unnumbered}
 <!-- add the following lines to correctly format the references section for ACM articles. -->
+<!--
 \footnotesize
 \setlength{\parindent}{-0.2in}
 \setlength{\leftskip}{0.2in}
 \indent
+-->
 <!-- pandoc appends bibliography here -->
