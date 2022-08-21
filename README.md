@@ -83,7 +83,7 @@ However, they might no longer work.
 
 ## See also
 
-- [Purush Swaminathan's acm-pandoc-paper](https://github.com/purukaushik/acm-pandoc-paper) (only seems to support the old version of the template but includes support for automatically building PDFs via Travis)
-- [Daniel Garziotin: How to write an ACM-styled conference paper using Markdown/Pandoc](https://ineed.coffee/4008/how-to-write-an-acm-styled-conference-paper-using-markdownpandoc/)
-- [Ulrik Lyngs: How to Write ACM Articles with R Markdown](https://ulyngs.github.io/blog/posts/2018-10-28-how-to-write-acm-articles-with-r-markdown/) ([Github Repository](https://github.com/ulyngs/chi-proc-rmd-template))
-
+- [Purush Swaminathan's acm-pandoc-paper](https://github.com/purukaushik/acm-pandoc-paper) (only seems to support the old version of the template but includes support for automatically building PDFs via Travis) 
+- [Daniel Garziotin (2016): How to write an ACM-styled conference paper using Markdown/Pandoc](https://ineed.coffee/4008/how-to-write-an-acm-styled-conference-paper-using-markdownpandoc/) ([GitHub repo](https://github.com/dgraziotin/acm_sig_paper_markdown_pandoc))
+- [Ulrik Lyngs (2016): How to Write ACM Articles with R Markdown](https://ulyngs.github.io/blog/posts/2018-10-28-how-to-write-acm-articles-with-r-markdown/) ([Github Repository](https://github.com/ulyngs/chi-proc-rmd-template))
+- [Kathy Reid (2020): Setting up an academic writing workflow using Pandoc, Markdown, Zotero and LaTeX on Ubuntu Linux using Atom](https://blog.kathyreid.id.au/2020/12/27/academic-writing-workflow/) (*"In the end I gave up trying to get this academic writing workflow to function with an ACM template; there were too many inconsistencies and errors for it to be workable, and I’d already sunk several hours into it."*)
